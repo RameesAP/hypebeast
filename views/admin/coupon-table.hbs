@@ -7,7 +7,7 @@
 
             <!-- Table Start -->
             <div class="btn btn-default">
-                <a href="/admin/add-banner" <button type="submit" class="btn btn-primary mt-4">Add Banner</button></a>
+                <a href="/admin/add-coupon" <button type="submit" class="btn btn-primary mt-4">Add Coupon</button></a>
             </div>
             <div class="container-fluid pt-5 px-5">
 
@@ -17,35 +17,35 @@
 
                         <div class="bg-secondary rounded h-100 p-4">
 
-                            <h6 class="mb-4">Banner Mangement</h6>
+                            <h6 class="mb-4">Coupon Mangement</h6>
 
                             <div class="table-responsive">
                                 <table class="table">
                                     <thead>
                                         <tr>
                                             {{!-- <th scope="col">No</th> --}}
-                                            <th scope="col">Title</th>
-                                            {{!-- <th scope="col">Category</th> --}}
-                                            <th scope="col">Description</th>
-                                            <th>Image</th>
+                                            <th scope="col">Coupen Name</th>
+                                            <th scope="col">Discount</th>
+                                            <th scope="col">Coupen Code</th>
+                                            {{!-- <th>Image</th> --}}
                                             {{!-- <th scope="col">Price</th> --}}
                                             <th scope="col">Action</th>
 
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {{#each bannerDetails}}
+                                        {{#each allCoupon}}
                                         <tr>
                                             {{!-- <th scope="row">1</th> --}}
-                                            <td>{{this.name}}</td>
-                                            {{!-- <td>{{this.category}}</td> --}}
-                                            <td>{{this.description}}</td>
-                                            <td><img style="width: 80px;height: 110px;" src="/product-image/{{this.image.[0]}}" alt="">
-                                            </td>
+                                            <td>{{this.coupenname}}</td>
+                                            <td>{{this.discount}}</td>
+                                            <td>{{this.coupencode}}</td>
+                                            {{!-- <td><img style="width: 80px;height: 110px;" src="/product-image/{{this.image.[0]}}" alt="">
+                                            </td> --}}
                                             {{!-- <td>{{this.price}}</td> --}}
                                             <td>
-                                                <a href="/admin/edit-banner/{{this._id}}"><button type="submit" class="btn btn-primary mt-4">Edit</button></a>
-                                                <a href="/admin/delete-banner/{{this._id}}"><button type="submit" class="btn btn-primary mt-4">Delete</button></a>
+                                                {{!-- <a href="/admin/edit-product/{{this._id}}"><button type="submit" class="btn btn-primary mt-4">Edit</button></a> --}}
+                                                <a href="/admin/delete-coupon/{{this._id}}"><button type="submit" class="btn btn-primary mt-4">Delete</button></a>
                                              </td>
                                         </tr>
                                         {{/each}}

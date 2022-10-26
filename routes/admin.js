@@ -4,6 +4,7 @@ const adminHelpers = require('../helpers/admin-helpers');
 const userHelpers = require('../helpers/user-helpers');
 const categoryHelpers = require('../helpers/category-helpers');
 const productHelpers = require('../helpers/product-helpers');
+const couponHelpers = require('../helpers/coupon-helpers')
 const router = express.Router();
 
 const path=require('path')
@@ -141,6 +142,9 @@ router.get('/user-active/:id', (req, res, next) => {
   })
 })
 
+
+/////////////////////////////category//////////////////////
+
 router.get('/category-mang',async (req,res)=>{
   let category =await categoryHelpers.getAllCategory()
     res.render('admin/category-mang',{layout:'adminLayout',admin:true,category})
@@ -223,19 +227,20 @@ router.get('/edit-product/:id',async (req,res)=>{
 
 ///////////////////bannner mang
 
-  router.get('/banner', (req, res, next) => {
-    res.render('admin/banner', { layout: 'adminLayout', admin: true })
+  router.get('/banner', async(req, res, next) => {
+    bannerDetails= await productHelpers.viewBanners()
+    console.log(bannerDetails,'banner')
+    res.render('admin/banner', { layout: 'adminLayout', admin: true ,bannerDetails})
   });
 
   router.get('/add-banner',async (req, res, next) => {
-
     res.render('admin/add-banner', { layout: 'adminLayout', admin: true})
   });
 
 
 
  
-    router.post('/add-banner',upload.array("images",3),(req,res)=>{
+   router.post('/add-banner',upload.array("images",3),(req,res)=>{
       console.log("banner immageeeeeeeeeeee");
       const images=req.files
       let array=[]
@@ -243,16 +248,72 @@ router.get('/edit-product/:id',async (req,res)=>{
       req.body.image=array;
       console.log(req.body,'req.body');
       productHelpers.bannerAdd(req.body).then((response)=>{
-        res.redirect('/admin/add-banner')
+        res.redirect('/admin/banner')
       })
+  });
+
+
+  router.get('/delete-banner/:id',(req,res)=>{
+    let bannerId=req.params.id
+    console.log(('lllllllllllllllllll'));
+    console.log(bannerId);
+    productHelpers.deleteBanner(bannerId).then((response)=>{
+      res.redirect('/admin/banner')
     })
- 
+  })
+
+  router.get('/edit-banner/:id',async(req,res)=>{
+    console.log('hooooooooooi');
+    let bannerId=req.params.id
+    console.log(bannerId);
+    let banner=await productHelpers.editBanner(bannerId)
+    res.render('admin/edit-banner',{layout:'adminLayout',admin:true,banner})
+  })
+
+  router.post('/edit-banner/:id',upload.array("image",3),(req,res)=>{
+    let bannerId=req.params.id
+    console.log("hoooooooooooooooooooooooooi");
+    const images=req.files
+    console.log(images);
+    let array=[]
+    array=images.map((value)=>value.filename);
+    req.body.image=array;
+    console.log(req.body,'req.body');
+    productHelpers.updateBanner(bannerId,req.body).then((response)=>{
+      res.redirect('/admin/banner')
+    })
+  })
+
+
+
+  ////////////////////////////coupon////////////////////////////////
+
+  router.get('/coupon-table',async(req,res)=>{
+   let allCoupon = await couponHelpers.getAllCoupon()
+    console.log(allCoupon);
+    res.render('admin/coupon-table',{layout:'adminLayout',admin:true,allCoupon})
+  })
+  
+
+  router.get('/add-coupon',(req,res)=>{
    
+    res.render('admin/add-coupon',{layout:'adminLayout',admin:true})
+  })
 
 
+  router.post('/add-coupon',(req,res)=>{
+  console.log(req.body,"jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj");
+  let coupon = couponHelpers.addCoupon(req.body)
+  console.log(coupon);
+  res.redirect('/admin/coupon-table')
+  })
 
 
-
+  router.get('/delete-coupon/:id',(req,res)=>{
+    let couponId = req.params.id
+    let couponDelete = couponHelpers.couponDelete(couponId)
+    res.redirect('/admin/coupon-table')
+  })
 
 
 

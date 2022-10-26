@@ -13,6 +13,7 @@ module.exports = {
 
     insertProducts:(productDetails)=>{
         console.log(productDetails,'productDetails');
+        productDetails.price = parseInt(productDetails.price)
         return new Promise((resolve,reject)=>{
             db.get().collection('products').insertOne(productDetails).then((data)=>{
                 console.log(data,'data')
@@ -33,12 +34,13 @@ module.exports = {
 
     getAllProduct:()=>{
         return new Promise(async (resolve, reject) => {
-            let products=db.get().collection('products').find().toArray()
+            let products=await db.get().collection('products').find().toArray()
             resolve(products)
         })
     },
 
      deleteProduct:(prodId)=>{
+      console.log(prodId,'proooooooooooo');
         return new Promise((resolve,reject)=>{
             console.log(prodId);
             console.log(objectId(prodId));
@@ -104,6 +106,75 @@ module.exports = {
 
   ///////banner
 
+
+  bannerAdd:(bannerDetails)=>{
+    console.log(bannerDetails,'bannerDetails');
+    return new Promise((resolve,reject)=>{
+      db.get().collection('banners').insertOne(bannerDetails).then((data)=>{
+        console.log(data,'data');
+        resolve(data)
+      })
+
+    })
+  },
+
+  viewBanners:()=>{
+
+    return new Promise(async(resolve,reject)=>{
+      let viewbanners=await db.get().collection('banners').find().toArray()
+      console.log(viewbanners,"kkkkk");
+      resolve(viewbanners)
+    })
+  },
+
+  getAllBanners:()=>{
+    return new Promise(async(resolve,reject)=>{
+      let banners=db.get().collection('banners').find().toArray()
+      resolve(banners)
+    })
+  },
+
+  deleteBanner:(bannerId)=>{
+    return new Promise((resolve,reject)=>{
+      console.log(bannerId);
+      console.log(objectId(bannerId));
+      db.get().collection('banners').deleteOne({_id:objectId(bannerId)}).then((response)=>{
+        console.log(response);
+        resolve(response)
+      })
+    })
+  },
+
+  editBanner:(bannerId)=>{
+    return new Promise((resolve,reject)=>{
+      db.get().collection('banners').findOne({_id:objectId(bannerId)}).then((banners)=>{
+        console.log(banners,'banners');
+        resolve(banners)
+      })
+    })
+  },
+
+  updateBanner:(bannerId,bannerDetails)=>{
+    console.log(bannerDetails,"detailsssss");
+    return new Promise((resolve,reject)=>{
+      try{
+        db.get().collection('banners')
+        .updateOne({_id:objectId(bannerId)},{
+          $set:{
+            name:bannerDetails.name,
+            description:bannerDetails.description,
+            image:bannerDetails.image
+
+          }
+        }).then((response)=>{
+          resolve()
+        })
+      }catch (error){
+        reject(error)
+
+      }
+    })
+  },
 
 
 

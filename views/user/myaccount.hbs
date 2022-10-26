@@ -22,16 +22,17 @@
             {{!-- <p class="text-muted mb-1">Full Stack Developer</p>
             <p class="text-muted mb-4">Bay Area, San Francisco, CA</p> --}}
             {{!-- <div class="btn-group-vertical mb-2"> --}}
-  
 
-            <div class="d-flex flex-column justify-content-center mb-2 mt-4">
-              <button type="button" class="btn btn-primary">Add Address</button>
-              <button type="button" class="btn btn-primary mt-2">Edit Profile</button>
-              <button type="button" class="btn btn-primary mt-2">Edit Password</button>
-              <button type="button" class="btn btn-primary mt-2">Logout</button>
-              {{!-- <button type="button" class="btn btn-outline-primary ms-1">Edit</button> --}}
-            </div>
-            {{!-- </div> --}}
+
+              <div class="d-flex flex-column justify-content-center mb-2 mt-4">
+                <a href="/address"><button type="button" class="btn btn-primary">Add Address</button></a>
+                <a href="/editprofile/{{UserEdit._id}}"><button type="button" class="btn btn-primary mt-2">Edit Profile</button></a>
+                <a href="/editpassword"><button type="button" class="btn btn-primary mt-2">Edit Password</button></a>
+                <a href="/logout"><button type="button" class="btn btn-primary mt-2">Logout</button></a>
+                {{!-- <button type="button" class="btn btn-outline-primary ms-1">Edit</button> --}}
+              </div>
+              {{!--
+            </div> --}}
           </div>
         </div>
         {{!-- <div class="card mb-4 mb-lg-0">
@@ -90,7 +91,8 @@
                 <p class="text-muted mb-0">{{User.phonenumber}}</p>
               </div>
             </div>
-            {{!-- <hr>
+            {{!--
+            <hr>
             <div class="row">
               <div class="col-sm-3">
                 <p class="mb-0">Mobile</p>
@@ -100,14 +102,14 @@
               </div>
             </div> --}}
             <hr>
-            <div class="row">
+            {{!-- <div class="row">
               <div class="col-sm-3">
                 <p class="mb-0">Address</p>
               </div>
               <div class="col-sm-9">
-                <p class="text-muted mb-0">Bay Area, San Francisco, CA</p>
+                <p class="text-muted mb-0">{{address.addressDetails.address2}}</p>
               </div>
-            </div>
+            </div> --}}
           </div>
         </div>
         <div class="row">
@@ -118,28 +120,28 @@
                 </p>
                 <p class="mb-1" style="font-size: .77rem;">Web Design</p>
                 <div class="progress rounded" style="height: 5px;">
-                  <div class="progress-bar" role="progressbar" style="width: 80%" aria-valuenow="80"
-                    aria-valuemin="0" aria-valuemax="100"></div>
+                  <div class="progress-bar" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0"
+                    aria-valuemax="100"></div>
                 </div>
                 <p class="mt-4 mb-1" style="font-size: .77rem;">Website Markup</p>
                 <div class="progress rounded" style="height: 5px;">
-                  <div class="progress-bar" role="progressbar" style="width: 72%" aria-valuenow="72"
-                    aria-valuemin="0" aria-valuemax="100"></div>
+                  <div class="progress-bar" role="progressbar" style="width: 72%" aria-valuenow="72" aria-valuemin="0"
+                    aria-valuemax="100"></div>
                 </div>
                 <p class="mt-4 mb-1" style="font-size: .77rem;">One Page</p>
                 <div class="progress rounded" style="height: 5px;">
-                  <div class="progress-bar" role="progressbar" style="width: 89%" aria-valuenow="89"
-                    aria-valuemin="0" aria-valuemax="100"></div>
+                  <div class="progress-bar" role="progressbar" style="width: 89%" aria-valuenow="89" aria-valuemin="0"
+                    aria-valuemax="100"></div>
                 </div>
                 <p class="mt-4 mb-1" style="font-size: .77rem;">Mobile Template</p>
                 <div class="progress rounded" style="height: 5px;">
-                  <div class="progress-bar" role="progressbar" style="width: 55%" aria-valuenow="55"
-                    aria-valuemin="0" aria-valuemax="100"></div>
+                  <div class="progress-bar" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0"
+                    aria-valuemax="100"></div>
                 </div>
                 <p class="mt-4 mb-1" style="font-size: .77rem;">Backend API</p>
                 <div class="progress rounded mb-2" style="height: 5px;">
-                  <div class="progress-bar" role="progressbar" style="width: 66%" aria-valuenow="66"
-                    aria-valuemin="0" aria-valuemax="100"></div>
+                  <div class="progress-bar" role="progressbar" style="width: 66%" aria-valuenow="66" aria-valuemin="0"
+                    aria-valuemax="100"></div>
                 </div>
               </div>
             </div>
@@ -151,34 +153,55 @@
                 </p>
                 <p class="mb-1" style="font-size: .77rem;">Web Design</p>
                 <div class="progress rounded" style="height: 5px;">
-                  <div class="progress-bar" role="progressbar" style="width: 80%" aria-valuenow="80"
-                    aria-valuemin="0" aria-valuemax="100"></div>
+                  <div class="progress-bar" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0"
+                    aria-valuemax="100"></div>
                 </div>
                 <p class="mt-4 mb-1" style="font-size: .77rem;">Website Markup</p>
                 <div class="progress rounded" style="height: 5px;">
-                  <div class="progress-bar" role="progressbar" style="width: 72%" aria-valuenow="72"
-                    aria-valuemin="0" aria-valuemax="100"></div>
+                  <div class="progress-bar" role="progressbar" style="width: 72%" aria-valuenow="72" aria-valuemin="0"
+                    aria-valuemax="100"></div>
                 </div>
                 <p class="mt-4 mb-1" style="font-size: .77rem;">One Page</p>
                 <div class="progress rounded" style="height: 5px;">
-                  <div class="progress-bar" role="progressbar" style="width: 89%" aria-valuenow="89"
-                    aria-valuemin="0" aria-valuemax="100"></div>
+                  <div class="progress-bar" role="progressbar" style="width: 89%" aria-valuenow="89" aria-valuemin="0"
+                    aria-valuemax="100"></div>
                 </div>
                 <p class="mt-4 mb-1" style="font-size: .77rem;">Mobile Template</p>
                 <div class="progress rounded" style="height: 5px;">
-                  <div class="progress-bar" role="progressbar" style="width: 55%" aria-valuenow="55"
-                    aria-valuemin="0" aria-valuemax="100"></div>
+                  <div class="progress-bar" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0"
+                    aria-valuemax="100"></div>
                 </div>
                 <p class="mt-4 mb-1" style="font-size: .77rem;">Backend API</p>
                 <div class="progress rounded mb-2" style="height: 5px;">
-                  <div class="progress-bar" role="progressbar" style="width: 66%" aria-valuenow="66"
-                    aria-valuemin="0" aria-valuemax="100"></div>
+                  <div class="progress-bar" role="progressbar" style="width: 66%" aria-valuenow="66" aria-valuemin="0"
+                    aria-valuemax="100"></div>
                 </div>
               </div>
             </div>
           </div> --}}
         </div>
+        <div class="row ml-2">
+        {{#each address}}
+        <div class="card mr-5" style="width: 18rem;">
+          
+          
+          <div class="card-body">
+            <h5 class="card-title">Address</h5>
+            <td class="card-text">
+             Name: {{this.addressDetails.address1}}<br>
+             Address: {{this.addressDetails.address2}}<br>
+              City: {{this.addressDetails.city}}<br>
+             State: {{this.addressDetails.state}}<br>
+             Pincode: {{this.addressDetails.pincode}}<br>
+            </td>
+            <a href="#" class="btn btn-primary">Edit</a>
+          </div>
+          
+        </div>
+        {{/each}}
       </div>
+
     </div>
+
   </div>
 </section>

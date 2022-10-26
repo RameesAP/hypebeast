@@ -4,6 +4,8 @@ module.export = {
     CATEGORY_COLLECTION: 'cat',
     PRODUCT_COLLECTION: 'product',
     CART_COLLECTION: 'cart',
+    BANNER_COLLECTION:'banners',
+    ADDRESS_COLLECTION:'address'
 
 
 }
