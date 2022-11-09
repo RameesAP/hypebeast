@@ -6,8 +6,6 @@ const ServiceSID = process.env.TWILIO_Service_SID;
 const client = require('twilio')(accountSid,authToken,ServiceSID);
 
 
-// const client = require('twilio')('AC948b0081ed24dd01500f90b6a3507282', 'eb20a7c1b79b6911dd9fddc27f0d9c88');
-// const serviceSid = 'VA3b8f1fba50893c3757f998acebacf216'
 
 module.exports = {
 

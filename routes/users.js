@@ -20,10 +20,7 @@ const verifyLogin = (req, res, next) => {
   }
 };
 
-// productHelpers.getAllProduct().then((products)=>{
-//   console.log(products);
-//   res.render('user/view-products' ,{ user: true,userfot: true,products})
-// })
+
 
 
 router.get('/', async (req, res, next) => {
@@ -32,22 +29,14 @@ router.get('/', async (req, res, next) => {
     let User = req.session.user
     let category = await categoryHelpers.getAllCategory()
     if (req.session.user) {
-
-      console.log(category, "userrrrrr category")
       let cartCount = await userHelper.getCartCount(req.session.user._id)
       let wishlistCount = await userHelper.getWishlistCount(req.session.user._id)
-      console.log(cartCount);
       productHelpers.getAllProduct().then((products) => {
-        console.log(products);
         productHelpers.getAllBanners().then((banner) => {
-          console.log(banner, "banner is here");
-
-
           res.render('user/index', { user: true, userfot: true, User, category, products, banner, cartCount, wishlistCount });
 
         })
       })
-      // res.render('user/index', { user: true,userfot: true,User });
     }
     else {
       productHelpers.getAllBanners().then((banner) => {
@@ -58,7 +47,7 @@ router.get('/', async (req, res, next) => {
     }
 
   } catch (error) {
-    next(error)
+    console.log(error);
   }
 
 
@@ -76,7 +65,7 @@ router.get('/login', (req, res, next) => {
     }
 
   } catch (error) {
-    next(error)
+    console.log(error);
   }
 
 });
@@ -85,42 +74,32 @@ router.get('/signin', (req, res) => {
   try {
     res.render('user/signin', { user: false })
   } catch (error) {
-    next(error)
+    console.log(error);
   }
 
 });
 
-// router.get('/otp', (req, res) => {
-//   res.render('user/otp')
-// });
+
 
 router.get('/otp', (req, res) => {
   try {
     res.render('user/otp')
   } catch (error) {
-    next(error)
+    console.log(error);
   }
 
 })
 
 
 router.post('/signin', (req, res) => {
-  console.log("aaaaaaaaaaaaaa");
+  
+  try {
     userHelper.verifyUser(req.body).then((response) => {
-      console.log("bbbbbbbbbbbbbbbb");
-      console.log(response);
       if (response.status) {
         req.session.body = req.body
-        console.log(req.body);
-        console.log(req.session.body);
-
         twillioHelper.doSms(req.body).then((data) => {
           req.session.body = req.body
-
-          // console.log(req.session.body);
-
           if (data) {
-
             res.redirect('/otp')
           } else {
             res.redirect('/signin')
@@ -132,12 +111,11 @@ router.post('/signin', (req, res) => {
       }
 
     })
- 
-  //  console.log(req.body);
-
-
-
-
+  } catch (error) {
+    console.log(error,'error vannu');
+    
+  }
+  
 }),
 
 
@@ -147,50 +125,27 @@ router.post('/signin', (req, res) => {
   router.post('/otp', (req, res) => {
     try {
       twillioHelper.otpVerify(req.body, req.session.body).then((response) => {
-
         if (response) {
-
           userHelper.doSignin(req.session.body).then((response) => {
-
             res.redirect('/login')
           })
 
         } else {
           req.session.message = "Invalid  OTP"
           res.redirect('/otp')
-
-
         }
-
-
       })
 
     } catch (error) {
-      next(error)
+      console.log(error);
     }
 
 
 
 
   }),
-
-
-  // router.post('/signin', (req, res) => {
-  //   userHelper.doSignin(req.body).then((state) => {
-  //     if(state.userexist){
-  //       req.session.userAlreadyExist=true;
-  //       res.redirect('/login')
-  //     }else{
-  //       req.session.user=state.user;
-  //       console.log(state.user);
-  //       res.redirect('/')
-  //     }
-
-
-  //   })
-  // });
-  router.post('/login', (req, res) => {
-    try {
+  router.post('/login', (req, res,next) => {
+ 
       userHelper.doLogin(req.body).then((response) => {
         if (response.status) {
           req.session.loggedIn = true
@@ -200,11 +155,10 @@ router.post('/signin', (req, res) => {
           req.session.loginErr = true
           res.redirect('/login')
         }
+      }).catch((error)=>{
+        console.log(error);
+        console.log(error);
       })
-    } catch (error) {
-      next(error)
-    }
-    // console.log(req.body);
 
   });
 
@@ -215,7 +169,7 @@ router.get('/logout', (req, res) => {
     req.session.destroy()
     res.redirect('/')
   } catch (error) {
-    next(error)
+    console.log(error);
   }
 
 });
@@ -227,7 +181,7 @@ router.get('/contact', (req, res) => {
     let User = req.session.user
     res.render('user/contact', { user: true, userfot: true, User })
   } catch (error) {
-    next(error)
+    console.log(error);
   }
 
 })
@@ -238,7 +192,7 @@ router.get('/about', (req, res) => {
     let User = req.session.user
     res.render('user/about', { user: true, userfot: true, User })
   } catch (error) {
-    next(error)
+    console.log(error);
   }
 
 })
@@ -255,7 +209,7 @@ router.get('/product', verifyLogin, async (req, res) => {
       })
     })
   } catch (error) {
-    next(error)
+    console.log(error);
   }
 
 })
@@ -266,10 +220,6 @@ router.get('/product/:id', verifyLogin, (req, res) => {
     if (req.session.user) {
       categoryHelpers.getByCategory(req.params.id).then((listcategory) => {
         // let User = req.session.user
-        console.log(listcategory);
-
-
-        console.log(listcategory, "listcategory");
         // let userid = req.session.user._id;
         categoryHelpers.getAllCategory().then((category) => {
           // console.log(category,"category");
@@ -286,7 +236,7 @@ router.get('/product/:id', verifyLogin, (req, res) => {
       })
     }
   } catch (error) {
-    next(error)
+    console.log(error);
   }
 
 })
@@ -297,16 +247,11 @@ router.get('/product-page', (req, res) => {
     let User = req.session.user
     res.render('user/product-detail', { user: true, userfot: true, User })
   } catch (error) {
-    next(error)
+    console.log(error);
   }
 })
 
-// router.get('/modal/:id',(req,res)=>{
-//   let id = req.params.id
-// productHelpers.getModal(id).then((response)=>{
-//   console.log(response,"ttttttttttttttttttttttttttt")
-// })
-// })
+
 
 
 
@@ -320,7 +265,7 @@ router.get('/deleteAddress/:id', (req, res, next) => {
   userHelpers.deleteAddress(addressId).then((response) => {
     res.redirect('/myaccount')
   }).catch((err) => {
-    next(err)
+    console.log(error);
   })
 })
 
@@ -329,12 +274,11 @@ router.get('/editAddress/:id', async (req, res) => {
   try {
     console.log('hooi');
     let addressId = req.params.id
-    // let getedAddress =await userHelpers.getAddress()
     console.log(addressId);
     let address = await userHelpers.editAddress(addressId)
     res.render('/editAddress', { user: true, userfot: true, address })
   } catch (error) {
-    next(error)
+    console.log(error);
   }
 
 })
@@ -348,7 +292,7 @@ router.post('/editAddress/:id', (req, res) => {
       res.redirect('/myaccount')
     })
   } catch (error) {
-    next(error)
+    console.log(error);
   }
 
 })
@@ -788,9 +732,13 @@ router.get('/cartempty', (req, res) => {
 
 })
 
-router.get('/order-details',(req,res)=>{
+router.get('/order-details/:id',async (req,res,next)=>{
   try {
-    res.render('user/order-details',{user: true})
+    let orderId = req.params.id
+    singleOrder = await userHelpers.getSingleOrder(orderId)
+    console.log(orderId,'lllllllllllllllllllllllllllllllllllllllllllll');
+    res.render('user/order-details',{user: true,singleOrder})
+    // console.log(singleOrder,"singleOrder");
   } catch (error) {
     next(error);
   }

@@ -5,13 +5,14 @@ const bcrypt = require('bcrypt')
 const { router, response } = require('../app')
 const { ObjectId } = require('mongodb')
 const e = require('express')
+//const Promise=require("promise")
 // const { ObjectId } = require('mongodb')
 const objectid = require('mongodb').ObjectId
 // var mongoose = require('mongoose');
 
 const Razorpay = require('razorpay')
 const { resolve } = require('path')
-
+// const Promise =require('promise')
 let instance = new Razorpay({
     key_id: 'rzp_test_RYnfWi3oj9XGMF',
     key_secret: 'rVTt9Vw7wTMRF29bHtuOyybD'
@@ -937,7 +938,7 @@ module.exports = {
 
 
 
-
+    // { $match: { userid: objectid(userId) } },
 
     codesuccess: (userId) => {
         console.log(userId, "userid");
@@ -946,95 +947,45 @@ module.exports = {
                 let orderDetails = await db.get().collection('orders').aggregate(
                     [
                         { $match: { userid: objectid(userId) } },
-                        // {
-                        //     '$lookup': {
-                        //         'from': 'address',
-                        //         'localField': 'deliveryAddress',
-                        //         'foreignField': '_id',
-                        //         'as': 'result'
-                        //     }
-                        // }, {
-                        //     '$unwind': {
-                        //         'path': '$result'
-                        //     }
-                        // }, {
-                        //     '$project': {
-                        //         'paymentDetails': 1,
-                        //         'userid': 1,
-                        //         'address': '$result.addressDetails.address2',
-                        //         'city': '$result.addressDetails.city',
-                        //         'state': '$result.addressDetails.state',
-                        //         'pincode': '$result.addressDetails.pincode',
-                        //         'productdetails': 1
-                        //     }
-                        // }, {
-                        //     '$lookup': {
-                        //         'from': 'user',
-                        //         'localField': 'userid',
-                        //         'foreignField': '_id',
-                        //         'as': 'result'
-                        //     }
-                        // }, {
-                        //     '$unwind': {
-                        //         'path': '$result'
-                        //     }
-                        // }, {
-                        //     '$lookup': {
-                        //         'from': 'products',
-                        //         'localField': 'productdetails',
-                        //         'foreignField': '_id',
-                        //         'as': 'productDetails'
-                        //     }
-                        // }, {
-                        //     '$unwind': {
-                        //         'path': '$productDetails'
-                        //     }
-                        // }, {
-                        //     '$project': {
-                        //         'paymentDetails': 1,
-                        //         'address': 1,
-                        //         'city': 1,
-                        //         'state': 1,
-                        //         'pincode': 1,
-                        //         'name': '$result.name',
-                        //         'email': '$result.email',
-                        //         'mobile': '$result.phonenumber',
-                        //         'productname': '$productDetails.name',
-                        //         'price': '$productDetails.price',
-                        //         'image': '$productDetails.image'
-                        //     }
-                        // }
-
 
                         {
-                            '$project': {
-                                'userid': 1,
-                                'paymentDetails': 1,
-                                'deliveryAddress': 1,
-                                'status': 1,
-                                'data': 1,
-                                'grandTotal': 1,
-                                'discountAmount': 1,
-                                'totalPrice': '$totalPrice',
-                                'products': '$multiproducts.products.item',
-                                'productQty': '$multiproducts.products.quantity',
-                                'productsize': '$multiproducts.products.Size'
-                            }
+                          '$project': {
+                            'userid': 1, 
+                            'paymentDetails': 1, 
+                            'deliveryAddress': 1, 
+                            'status': 1, 
+                            'data': 1, 
+                            'grandTotal': 1, 
+                            'discountAmount': 1, 
+                            'totalPrice': '$totalPrice', 
+                            'products': '$multiproducts.products.item', 
+                            'productQty': '$multiproducts.products.quantity', 
+                            'productsize': '$multiproducts.products.Size'
+                          }
                         }, {
-                            '$lookup': {
-                                'from': 'products',
-                                'localField': 'products',
-                                'foreignField': '_id',
-                                'as': 'productDetails'
-                            }
+                          '$lookup': {
+                            'from': 'products', 
+                            'localField': 'products', 
+                            'foreignField': '_id', 
+                            'as': 'productDetails'
+                          }
                         }, {
-                            '$unwind': {
-                                'path': '$productDetails'
-                            },
-                            
+                          '$lookup': {
+                            'from': 'address', 
+                            'localField': 'deliveryAddress', 
+                            'foreignField': '_id', 
+                            'as': 'addressdetails'
+                          }
+                        }, {
+                          '$unwind': {
+                            'path': '$productDetails'
+                          }
+                        }, {
+                          '$unwind': {
+                            'path': '$addressdetails'
+                          }
                         }
-
-                    ]
+                      ]
                 ).toArray()
                 console.log(orderDetails, "hhhhhhhhhhhhhhhhhhhhh");
                 resolve(orderDetails)
@@ -1212,6 +1163,52 @@ module.exports = {
             } catch (error) {
                 reject(error)
 
+            }
+        })
+    },
+
+
+    getSingleOrder:(orderId)=>{
+        return new Promise(async(resolve,reject)=>{
+            try {
+               let singleOrder=await db.get().collection('orders').aggregate([
+
+
+                    { $match: { _id: objectid(orderId) } },
+                   
+                    {
+                        '$project': {
+                            'userid': 1,
+                            'paymentDetails': 1,
+                            'deliveryAddress': 1,
+                            'status': 1,
+                            'data': 1,
+                            'grandTotal': 1,
+                            'discountAmount': 1,
+                            'totalPrice': '$totalPrice',
+                            'products': '$multiproducts.products.item',
+                            'productQty': '$multiproducts.products.quantity',
+                            'productsize': '$multiproducts.products.Size'
+                        }
+                    }, {
+                        '$lookup': {
+                            'from': 'products',
+                            'localField': 'products',
+                            'foreignField': '_id',
+                            'as': 'productDetails'
+                        }
+                    }, {
+                        '$unwind': {
+                            'path': '$productDetails'
+                        },
+                        
+                    }
+
+                ]).toArray()
+                console.log(singleOrder,"singleOrder")
+                resolve(singleOrder)
+            } catch (error) {
+                reject(error)
             }
         })
     },

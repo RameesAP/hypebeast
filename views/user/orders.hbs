@@ -28,8 +28,9 @@ background: linear-gradient(to top left, rgba(205, 156, 242, 1), rgb(241, 206, 1
               <p class="small text-muted mb-0">userid: {{userId}}</p>
             </div>
 
-            <a href="/order-details">
+            
             {{#each orderDetails}}
+            <a href="/order-details/{{this._id}}">
             <div class="card shadow-0 border mb-4">
               <div class="card-body">
                 <div class="row">
