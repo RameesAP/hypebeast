@@ -1,5 +1,5 @@
 <!-- Shoping Cart -->
-<form class="bg0 p-t-75 mt-5">
+<div class="bg0 p-t-75 mt-5">
 	<div class="container">
 		<div class="row">
 			<div class="col-lg-10 col-xl-7 m-lr-auto m-b-50">
@@ -126,8 +126,8 @@
 											<!-- Default checked -->
 											<div class="table-responsive-xl pt-0 ml-5">
 												<div class="form-check mt-2">
-													<input class="form-check-input ml-5" type="radio" name="address" 
-														id="exampleRadios1" value="{{this.addressDetails._id}}" checked>
+													<input class="form-check-input ml-5" type="radio" name="address"
+														id="exampleRadios1" value="{{this._id}}" checked>
 													<label class="form-check-label pl-0" for="exampleRadios1">
 														{{!-- <span class="stext-111 cl2 md-1 ml-1"></span> --}}
 													</label>
@@ -210,7 +210,7 @@
 						</div>
 					</div>
 					{{!-- ---------------------------- C O U P O N ----------------------------------------}}
-
+					{{!--
 					<div class="flex-w flex-sb-m bor15 p-t-18 p-b-15 p-lr-40 p-lr-15-sm pl-3 p-0">
 						{{#if couponUsed}}
 						<div class="flex-w flex-m m-r-20 m-tb-5">
@@ -226,12 +226,12 @@
 							</div>
 						</div>
 					</div>
-					{{else}}
+					{{else}} --}}
 					<div class="flex-w flex-m m-r-20 m-tb-5">
-						<input class="stext-104 cl2 plh4 size-117 bor13 p-lr-20 m-r-10 m-tb-5" type="text" name="coupon"
-							placeholder="Coupon Code" disabled>
+						<input class="stext-104 cl2 plh4 size-117 bor13 p-lr-20 m-r-10 m-tb-5" id="coupenCode"
+							type="text" name="coupenCode" placeholder="coupenCode">
 						<div class="flex-c-m stext-101 cl2 size-118 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-5">
-							Apply coupon
+							<button onclick="applyCoupen()" type="button">Apply coupon</button>
 						</div>
 						<div>
 							<i class="bi bi-tags-fill ml-4 mr-2 cl2"></i><a
@@ -240,13 +240,14 @@
 
 						</div>
 					</div>
-				</div>
-				{{/if}}
-				<a href="/">
+					{{!--
+				</div> --}}
+				{{!-- {{/if}} --}}
+				{{!-- <a href="/">
 					<div class="flex-c-m stext-101 cl2 size-119 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-10">
 						Continue shopping
 					</div>
-				</a>
+				</a> --}}
 
 			</div>
 		</div>
@@ -293,10 +294,14 @@
 					<div class="header-cart-content flex-w js-pscroll">
 						<ul class="header-cart-wrapitem w-full">
 							<li class="header-cart-item flex-w flex-t m-b-12">
+
+
 								{{#each products}}
+
 								<div class="header-cart-item-img mb-1">
 									<img src="/product-image/{{this.image.[0]}}" alt="IM1G">
 								</div>
+								<input type="text" value="{{this.productid}}" name="productID">
 
 								<div class="header-cart-item-txt p-t-8">
 									<a href="#" class="header-cart-item-name m-b-18 hov-cl1 trans-04">
@@ -341,14 +346,7 @@
 					</div>
 				</div>
 
-				{{!-- <button class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04"
-					onclick="confirmOrder()">
-					Confirm Order
-				</button> --}}
-				{{!-- <button class="flex-c-m stext-101 cl2 size-118 bg8 bor13 hov-btn3 p-lr-15 trans-04 m-tb-5"
-					onclick="confirmOrder()">
-					Confirm Order
-				</button> --}}
+
 			</div>
 		</div>
 		{{else}}
@@ -361,17 +359,17 @@
 				<div class="flex-w flex-t bor12 p-b-13">
 					<div class="size-208">
 						<span class="stext-110 cl2">
-							Subtotal:
+							Subtotal: ₹
 						</span>
 					</div>
 
 					<div class="size-209">
-						<span class="mtext-110 cl2">₹
+						<span class="mtext-110 cl2">
 							{{#each total}}
 							<span class="mtext-110 cl2">
 								{{this.total}}
 							</span>
-							{{/each}}</span><span id="grandTotal" class="mtext-110 cl2">
+							{{/each}}</span><span class="mtext-110 cl2">
 
 
 						</span>
@@ -382,11 +380,11 @@
 					<div class="header-cart-content flex-w js-pscroll">
 						<ul class="header-cart-wrapitem w-full">
 							<li class="header-cart-item flex-w flex-t m-b-12">
-								{{#each products}}
+								{{#each cartProd}}
 								<div class="header-cart-item-img mb-1">
 									<img src="/product-image/{{this.image.[0]}}" alt="IM1G">
 								</div>
-
+								<input type="text" value="{{this.productid}}" hidden name="productID">
 								<div class="header-cart-item-txt p-t-8">
 									<a href="#" class="header-cart-item-name m-b-18 hov-cl1 trans-04">
 										{{this.productName}}
@@ -417,6 +415,20 @@
 						</div>
 					</div>
 				</div>
+				{{!-- <div class="flex-w flex-t p-t-27 p-b-33">
+					<div class="size-208">
+						<span class="mtext-101 cl2">
+							Total: ₹
+						</span>
+					</div>
+
+					<div class="size-209 p-t-1">
+						{{#each total}}
+						<h4><span class="mtext-110 cl2" id="grandtotal">{{this.total}}
+							</span></h4>
+						{{/each}}
+					</div>
+				</div> --}}
 
 				<div class="flex-w flex-t p-t-27 p-b-33">
 					<div class="size-208">
@@ -426,11 +438,13 @@
 					</div>
 
 					<div class="size-209 p-t-1">
-						<input type="text">₹
+						{{!-- <input type="text">₹ --}}
 						{{#each total}}
-						<span class="mtext-110 cl2">
-							{{this.total}}
-						</span>
+						{{!-- <span class="mtext-110 cl2"> --}}
+							<h4 id="grandtotal">{{this.total}} </h4>
+
+							{{!--
+						</span> --}}
 						{{/each}}
 						<span id="grandTotal" class="mtext-110 cl2">
 							<i class="bi bi-tools btn-utline-warning fs-3"></i>
@@ -438,16 +452,18 @@
 					</div>
 				</div>
 
-				<button onclick="confirmOrder()" class="btn btn-success">
+				<button onclick="confirmOrder()"
+					class="flex-c-m stext-101 cl2 size-119 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-10">
 					Confirm Order
 				</button>
+
 			</div>
 		</div>
 		{{/if}}
 
 	</div>
-	</div>
-</form>
+</div>
+</div>
 
 
 <!--=========================================== A D D   A D D R E S S  M O D A L =================================================-->
@@ -684,35 +700,36 @@
 ==============================================================================================--}}
 
 
-{{!-- <div id="couponModal" class="modal fade" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true; w-100">
+<div id="couponModal" class="modal fade" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true; w-100">
 	<div class="modal-content modal-dialog modal-lg" role="document">
 		<header class="modal-header flex-column justify-content-center border-0 p-0 mb-xl-5 cl2">
 			<h4 id="exampleModalLabel" class="modal-title mx-auto cl2 stext-101 fw-bolder fs-3 p-0">Coupons</h4>
 		</header>
 		<div class="modal-body pt-3 mb-5 mb-md-7 text-center cl2">
-			{{#each couponData}}
+
+			{{#each getcoupon}}
 			<div class="container mt-5">
 				<div class="d-flex justify-content-center row">
 					<div class="col-md-12">
 						<div class="coupon p-3 bg-white shadow p-3 mb-5 bg-white rounded">
 							<div class="row no-gutters">
 								<div class="col-md-4 border-right">
-									<div class="d-flex flex-column align-items-center"><img
-											src="https://i.imgur.com/XwBlVpS.png">
-										<span class="d-block">{{this.couponName}}</span><span
-											class="text-black-50 fs-7">GAMEX</span>
+									<div class="d-flex flex-column align-items-center">
+										<img src="https://i.imgur.com/XwBlVpS.png">
+										<span class="d-block">{{this.coupenname}}</span>
+										<span class="text-black-50 fs-7">Hypebeast</span>
 									</div>
 								</div>
 								<div class="col-md-8">
 									<div>
 										<div class="d-flex flex-row justify-content-end off">
-											<h1>{{this.offer}}%</h1><span>OFF</span>
+											<h1>{{this.discount}}%</h1><span>OFF</span>
 										</div>
 										<div class="d-flex flex-row justify-content-between off px-3 p-2"><span>Promo
 												code:</span><span
-												class="border border-success px-3 rounded code">{{this.code}}</span>
-											<button type="button" class="btn btn-dark" id="{{this._id}}"
-												onclick="redeem('{{this._id}}')">Redeem</button>
+												class="border border-success px-3 rounded code">{{this.coupencode}}</span>
+											{{!-- <button type="button" class="btn btn-dark" id="{{this._id}}"
+												onclick="redeem('{{this._id}}')">Redeem</button> --}}
 										</div>
 									</div>
 								</div>
@@ -724,7 +741,7 @@
 			{{/each}}
 		</div>
 	</div>
-</div> --}}
+</div>
 
 
 
@@ -735,35 +752,149 @@
 	</span>
 </div>
 
-{{!-- <script>$('#myModal').modal(options)</script> --}}
+{{!--
+<script>$('#myModal').modal(options)</script> --}}
 
-{{!-- <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script> --}}
+{{!--
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script> --}}
 
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 <script>
 
-		const confirmOrder=()=> {
+	function confirmOrder() {
 		console.log('inside botton clickkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk')
-		 
-		 let paymentDetails = $('input[type="radio"][name="payment"]:checked').val()
-		 let deliveryDetails = $('input[type="radio"][name="address"]:checked').val()
+		let paymentDetails = $('input[type="radio"][name="payment"]:checked').val()
+		let deliveryDetails = $('input[type="radio"][name="address"]:checked').val()
+		let productid = $('input[type="text"][name="productID"]').val()
+		console.log(paymentDetails)
 
-		if(deliveryDetails !==undefined){
+		console.log(productid, "iiiiiiddd")
+		try {
+			const res = axios.post('/checkOutPost', {
+				
+				paymentDetails: paymentDetails,
+				deliveryDetails: deliveryDetails,
+				productid: productid
+			}).then((e) => {
+				console.log(e, "eeeeeeeeeeeeeeeeeeeeeeeee")
+				if (e.data.codSuccess) {
+					location.href = '/coddelivery'
+				} else {
+					console.log("ddddd")
+					razorpayPayment(e)
+				}
 
-			try{
-				const res =await axios.post('/checkOut',{
-					paymentDetails:paymentDetails,
-					deliveryDetails:deliveryDetails
-				}).then((e)=>{
-					console.log(e,"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
+
+				console.log(e, "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
+			})
+		} catch (err) {
+
+			console.log(err)
+		}
+
+
+
+
+	}
+
+	function razorpayPayment(order) {
+		console.log(order, "lllllllll")
+		let amount = parseInt(order.data.amount)
+		console.log(typeof (amount), "ddddfffff")
+		var options = {
+			"key": "rzp_test_RYnfWi3oj9XGMF", // Enter the Key ID generated from the Dashboard
+			"amount": amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+			"currency": "INR",
+			"name": "Hypebeast",
+			"description": "Test Transaction",
+			"image": "https://example.com/your_logo",
+			"order_id": order.data.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+			"handler": function (response) {
+				alert(response.razorpay_payment_id);
+				alert(response.razorpay_order_id);
+				alert(response.razorpay_signature);
+
+				verifyPayment(response, order)
+			},
+			"prefill": {
+				"name": "Gaurav Kumar",
+				"email": "gaurav.kumar@example.com",
+				"contact": "9999999999"
+			},
+			"notes": {
+				"address": "Razorpay Corporate Office"
+			},
+			"theme": {
+				"color": "#3399cc"
+			}
+		};
+		var rzp1 = new Razorpay(options);
+		rzp1.open();
+	}
+	function verifyPayment(payment, order) {
+		console.log(payment,"hoooooooooooooooooooooi",order,"haaaaaaaaaaaaaaaaaaaaai")
+		axios({
+			method: 'post',
+			url: '/verify-payment',
+			data: {
+				payment,
+				order
+			},
+			}).then((response)=>{
+
+			//success: (response) => {
+				console.log(response,"ryyyyyyyyyyyyyyyyyyy")
+				if (response.status) {
+					
+					location.href = '/coddelivery'
+
+				}else{
+					alert("payment failed")
+				}
+			})
+			}
+		
+	//}
+
+</script>
+
+<script>
+	function applyCoupen() {
+		console.log("hhhhhhhhh")
+		let value = document.getElementById('coupenCode').value
+		console.log(value,"value")
+		axios({
+			method: 'post',
+			url: '/applyCoupen',
+			data: {
+				code: value
+			}
+		}).then((e) => {
+			console.log(e.data)
+			if (e.data) {
+				document.getElementById('grandtotal').innerHTML = e.data
+
+				Swal.fire({
+					icon: 'success',
+					title: 'Success',
+					text: 'Successfully Entered',
+
+				})
+
+
+			} else {
+				Swal.fire({
+					icon: 'info',
+					title: 'Oops...',
+					text: 'Please Enter your coupen!',
+
 				})
 			}
 
-
-		}
-
+		})
 	}
 
 </script>

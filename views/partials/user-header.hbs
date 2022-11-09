@@ -5,7 +5,7 @@
 		<div class="top-bar">
 			<div class="content-topbar flex-sb-m h-full container">
 				<div class="left-top-bar">
-					Free shipping for standard order over $100
+					{{!-- Free shipping for standard order over $100 --}}
 				</div>
 
 				<div class="right-top-bar flex-w h-full">
@@ -21,9 +21,9 @@
 						EN
 					</a> --}}
 
-					<a href="#" class="flex-c-m trans-04 p-lr-25">
+					{{!-- <a href="#" class="flex-c-m trans-04 p-lr-25">
 						INR
-					</a>
+					</a> --}}
 				</div>
 			</div>
 		</div>
@@ -33,7 +33,7 @@
 
 				<!-- Logo desktop -->
 				<a href="#" class="logo">
-					<img src="images/logo/newlogo.gif" style="width:70px; height:180px" alt="IMG-LOGO">
+					<img src="/images/logo/newlogo.gif" style="width:70px; height:180px" alt="IMG-LOGO">
 				</a>
 
 				<!-- Menu desktop -->
@@ -50,36 +50,36 @@
 
 						<li>
 							<a href="/product">Shop</a>
-							<ul class="sub-menu">
+							{{!-- <ul class="sub-menu">
 								<li><a href="index.html">Topware</a></li>
 								<li><a href="home-02.html">Bottomwear</a></li>
-								<li><a href="home-03.html">SHOES</a></li>
-							</ul>
+								<li><a href="home-03.html">Accessories</a></li>
+							</ul> --}}
 						</li>
 
-						<li class="label1" data-label1="hot">
+						{{!-- <li class="label1" data-label1="hot">
 							<a href="shoping-cart.html">Offers</a>
-						</li>
+						</li> --}}
 						{{#if user}}
 						<li>
-							<a href="/login">Orders</a>
-							<ul class="sub-menu">
+							<a href="/orders">Orders</a>
+							{{!-- <ul class="sub-menu">
 								<li><a href="index.html">Track Order</a></li>
 								<li><a href="home-02.html">Returns</a></li>
 								<li><a href="home-03.html">Shipping</a></li>
-							</ul>
+							</ul> --}}
 						</li>
 						{{/if}}
 						{{!-- <li>
 							<a href="/login">Logout</a>
 						</li> --}}
-						<li>
+						{{!-- <li>
 							<a href="/about">About</a>
-						</li>
+						</li> --}}
 
-						<li>
+						{{!-- <li>
 							<a href="/contact">Contact</a>
-						</li>
+						</li> --}}
 					</ul>
 				</div>
 
@@ -129,7 +129,7 @@
 	<div class="wrap-header-mobile">
 		<!-- Logo moblie -->
 		<div class="logo-mobile">
-			<a href="index.html"><img src="images/logo/newlogo.gif" style="width:100px; height:100px"
+			<a href="index.html"><img src="/images/logo/newlogo.gif" style="width:100px; height:100px"
 					alt="IMG-LOGO"></a>
 		</div>
 
@@ -253,7 +253,7 @@
 		<div class="container-search-header">
 
 			<button class="flex-c-m btn-hide-modal-search trans-04 js-hide-modal-search">
-				<img src="images/icons/icon-close2.png" alt="CLOSE">
+				<img src="/images/icons/icon-close2.png" alt="CLOSE">
 			</button>
 
 			<form class="wrap-search-header flex-w p-l-15">

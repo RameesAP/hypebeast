@@ -1,92 +1,142 @@
-<div class="container mt-5 md-5">
-    <section class="h-50 gradient-custom">
-      <div class="container py-5 h-100">
-        <div class="row d-flex justify-content-center align-items-center h-100">
-          <div class="col-lg-10 col-xl-8">
-            <div class="card" style="border-radius: 10px;">
-              <div class="card-header px-4 py-5">
-                <h5 class="text-muted mb-0">Thanks for your Order, <span style="color: #a8729a;">{{orderData.fname}}</span>!</h5>
-                
-              </div>
-                    
-              <div class="card-body p-4">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                  <p class="lead fw-normal mb-0" style="color: #a8729a;">Receipt</p>
-                  <p class="small text-muted mb-0">Receipt Voucher : 1KAU9-84UIL</p>
-                </div>
-                <div class="card shadow-0 border mb-4">
-                  {{#each populatedOrderData.products}}
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="col-md-2">
-                        <img src="/multerimages/{{this.product.image.[2]}}"
-                          class="img-fluid" alt="Phone">
-                      </div>
-                      <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                        <p class="text-muted mb-0">{{this.product.title}}</p>
-                      </div>
-                      <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                        <p class="text-muted mb-0 small">Standard</p>
-                      </div>
-                      <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                        <p class="text-muted mb-0 small">Xbox</p>
-                      </div>
-                      <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                        <p class="text-muted mb-0 small">Qty: {{this.quantity}}</p>
-                      </div>
-                      <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                        <p class="text-muted mb-0 small">${{this.product.price}}</p>
-                      </div> 
-                    </div>
-                    <hr class="mb-4" style="background-color: #e0e0e0; opacity: 1;">
-                    <div class="row d-flex align-items-center">
-                      <div class="col-md-2">
-                        <p class="text-muted mb-0 small">Track Order</p>
-                      </div>
-                      <div class="col-md-10">
-                        <div class="progress" style="height: 6px; border-radius: 16px;">
-                          <div class="progress-bar" role="progressbar"
-                            style="width: 65%; border-radius: 16px; background-color: #006aff;" aria-valuenow="65"
-                            aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                        <div class="d-flex justify-content-around mb-1">
-                          <p class="text-muted mt-1 mb-0 small ms-xl-5">Out for delivary</p>
-                          <p class="text-muted mt-1 mb-0 small ms-xl-5">Delivered</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  {{/each}} 
-                 
-                </div>
-                <div class="d-flex justify-content-between pt-2">
-                  <p class="fw-bold mb-0">Order Details</p>
-                  <p class="text-muted mb-0"><span class="fw-bold me-4">Total</span>₹ {{orderData.subTotal}}</p>
-                </div>
-    
-                <div class="d-flex justify-content-between pt-2">
-                  <p class="text-muted mb-0">Invoice Number : 788152</p>
-                  <p class="text-muted mb-0"><span class="fw-bold me-4">Discount</span>₹ {{{orderData.couponDiscount}}}</p>
-                </div> 
-    
-                <div class="d-flex justify-content-between">
-                  <p class="text-muted mb-0">Invoice Date : 22 Dec,2019</p>
-                  <p class="text-muted mb-0"><span class="fw-bold me-4">GST 18%</span> 123</p>
-                </div>
-    
-                <div class="d-flex justify-content-between mb-5">
-                  <p class="text-muted mb-0">Recepits Voucher : 18KU-62IIK</p>
-                  <p class="text-muted mb-0"><span class="fw-bold me-4">Delivery Charges</span> Free</p>
-                </div>
-              </div>
-              <div class="card-footer border-0 px-4 py-5"
-                style="background-color: #1f293a; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
-                <h5 class="d-flex align-items-center justify-content-end text-white text-uppercase mb-0">Total
-                  paid: <span class="h2 mb-0 ms-2">₹ {{orderData.grandTotal}}</span></h5>
-              </div>
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800&display=swap");
+
+  body {
+    background-color: #eee;
+    font-family: "Poppins", sans-serif;
+    font-weight: 300
+  }
+
+  .cart {
+    height: 100vh
+  }
+
+  .progresses {
+    display: flex;
+    align-items: center
+  }
+
+  .line {
+    width: 76px;
+    height: 6px;
+    background: #63d19e
+  }
+
+  .steps {
+    display: flex;
+    background-color: #63d19e;
+    color: #fff;
+    font-size: 12px;
+    width: 30px;
+    height: 30px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%
+  }
+
+  .check1 {
+    display: flex;
+    background-color: #63d19e;
+    color: #fff;
+    font-size: 17px;
+    width: 200px;
+    height: 200px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    margin-bottom: 10px
+  }
+
+  .invoice-link {
+    font-size: 15px
+  }
+
+  .order-button {
+    height: 50px
+  }
+
+  .background-muted {
+    background-color: #fafafc
+  }
+</style>
+
+
+<div class="container mt-4 mb-4">
+  <div class="row d-flex cart align-items-center justify-content-center">
+    <div class="col-md-10 ">
+      <div class="card">
+        {{!-- <div class="d-flex justify-content-center border-bottom">
+          <div class="p-3">
+            <div class="progresses">
+              <div class="steps"> <span><i class="fa fa-check"></i></span> </div> <span class="line"></span>
+              <div class="steps"> <span><i class="fa fa-check"></i></span> </div> <span class="line"></span>
+              <div class="steps"> <span class="font-weight-bold">3</span> </div>
             </div>
           </div>
+        </div> --}}
+        <div class="row g-0">
+          <div class="col-12 ">
+            <div class="text-center order-details">
+              <div class="d-flex justify-content-center mb-5 flex-column align-items-center"> <span class="check1"><i
+                    class="fa fa-check" style="font-size: 180px;"></i></span> <span class="font-weight-bold">Order Confirmed</span> <small
+                  class="mt-2">Your illustraion will go to you soon</small>
+                {{!-- <a href="#" class="text-decoration-none invoice-link">View Invoice</a> --}}
+              </div>
+              <a href="/orders"><button class="btn btn-danger  order-button">Go to your Order</button></a>
+              <a href="/product"><button class="btn btn-danger  order-button">Go to your Shop</button></a>
+            </div>
+          </div>
+          {{!-- <div class="col-md-6 background-muted">
+            <div class="p-3 border-bottom">
+              <div class="d-flex justify-content-between align-items-center"> <span><i
+                    class="fa fa-clock-o text-muted"></i> 3 days delivery</span> <span><i
+                    class="fa fa-refresh text-muted"></i> 2 Max Revisions</span> </div>
+              <div class="mt-3">
+                <h6 class="mb-0">Illustraion in Sketch or AI</h6> <span class="d-block mb-0">Includes: Sketch, PSD, PNG,
+                  SVG, AI </span> <small>Min: 1 illustraion</small>
+                <div class="d-flex flex-column mt-3"> <small><i class="fa fa-check text-muted"></i> Vector file</small>
+                  <small><i class="fa fa-check text-muted"></i> Sources files</small>
+                </div>
+              </div>
+            </div>
+            <div class="row g-0 border-bottom">
+              <div class="col-md-6 border-right">
+                <div class="p-3 d-flex justify-content-center align-items-center"> <span>x3</span> </div>
+              </div>
+              <div class="col-md-6">
+                <div class="p-3 d-flex justify-content-center align-items-center"> <span>$20 per unit</span> </div>
+              </div>
+            </div>
+            <div class="row g-0 border-bottom">
+              <div class="col-md-6">
+                <div class="p-3 d-flex justify-content-center align-items-center"> <span>Subtotal</span> </div>
+              </div>
+              <div class="col-md-6">
+                <div class="p-3 d-flex justify-content-center align-items-center"> <span>$60</span> </div>
+              </div>
+            </div>
+            <div class="row g-0 border-bottom">
+              <div class="col-md-6">
+                <div class="p-3 d-flex justify-content-center align-items-center"> <span>Processing fees</span> </div>
+              </div>
+              <div class="col-md-6">
+                <div class="p-3 d-flex justify-content-center align-items-center"> <span>$1.80</span> </div>
+              </div>
+            </div>
+            <div class="row g-0">
+              <div class="col-md-6">
+                <div class="p-3 d-flex justify-content-center align-items-center"> <span
+                    class="font-weight-bold">Total</span> </div>
+              </div>
+              <div class="col-md-6">
+                <div class="p-3 d-flex justify-content-center align-items-center"> <span
+                    class="font-weight-bold">$61.80</span> </div>
+              </div>
+            </div>
+          </div> --}}
         </div>
+        <div> </div>
       </div>
-    </section>
+    </div>
+  </div>
 </div>

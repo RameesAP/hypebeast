@@ -37,10 +37,20 @@
                                 
                                 <select class="form-select" name="category" aria-label="Default select example">
                                     <option selected>Category</option>
+
                                     {{#each cat}}
-                                    <option value="{{this.category}}">{{this.category}}</option>
+                                    <option value="{{this._id}}">{{this.category}}</option>
                                     {{/each}}
                                 </select>
+                                 <label for="" class="form-label mt-3">Size</label>
+                                <div class="mt-2 mb-2 ">
+                                   
+                                <input type="checkbox" value="S" name="size"><label for="">S</label>
+                                 <input type="checkbox" value="M" name="size"><label for="">M</label>
+                                  <input type="checkbox" value="L" name="size"><label for="">L</label>
+                                   <input type="checkbox" value="XL" name="size"><label for="">XL</label>
+                                </div>
+                                
                                 <div class="mb-3">
                                     <label for="price" class="form-label">Price</label>
                                     <input type="text" name="price" class="form-control" id="price">

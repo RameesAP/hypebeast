@@ -27,7 +27,7 @@
                                             <th scope="col">Name</th>
                                             {{!-- <th scope="col">Email</th> --}}
                                             {{!-- <th scope="col">Number</th> --}}
-                                            {{!-- <th>Image</th> --}}
+                                            <th>Image</th>
                                             <th scope="col">Action</th>
 
                                         </tr>
@@ -43,7 +43,8 @@
                                                     alt=""></td> --}}
                                             {{!-- <td>{{this.password}}</td> --}}
                                          
-                                           
+                                           <td><img style="width: 80px;height: 110px;" src="/product-image/{{this.catimages.[0]}}" alt="">
+                                            </td>
                                          
                                             <td><a href="/admin/category-delete/{{this._id}}"class="btn btn-danger mt-2">Delete</a></td>
                                                     
