@@ -93,7 +93,7 @@ router.get('/otp', (req, res) => {
 
 router.post('/signin', (req, res) => {
   
-  try {
+  // try {
     userHelper.verifyUser(req.body).then((response) => {
       if (response.status) {
         req.session.body = req.body
@@ -111,10 +111,10 @@ router.post('/signin', (req, res) => {
       }
 
     })
-  } catch (error) {
-    console.log(error,'error vannu');
+  // } catch (error) {
+  //   console.log(error,'error vannu');
     
-  }
+  // }
   
 }),
 
