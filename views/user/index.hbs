@@ -894,6 +894,8 @@
 			url: '/add-to-wishlist',
 			data: { productid }
 		}).then((response) => {
+			console.log(response)
+			if(response.data.response){
 				Swal.fire({
 				position: 'top-bottom',
 				icon: 'success',
@@ -901,6 +903,16 @@
 				showConfirmButton: false,
 				timer: 1500
 			})
+			}else{
+					Swal.fire({
+				position: 'top-bottom',
+				icon: 'warning',
+				title: 'Item alredy exist',
+				showConfirmButton: false,
+				timer: 1500
+			})
+
+			}
 		})
 	}
 </script>

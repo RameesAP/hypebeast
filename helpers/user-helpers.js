@@ -12,6 +12,7 @@ const objectid = require('mongodb').ObjectId
 
 const Razorpay = require('razorpay')
 const { resolve } = require('path')
+const { reject } = require('promise')
 // const Promise =require('promise')
 let instance = new Razorpay({
     key_id: 'rzp_test_RYnfWi3oj9XGMF',
@@ -730,6 +731,9 @@ module.exports = {
         let proObj = {
             item: itemid,
         }
+        let response={
+
+        }
 
 
         return new Promise(async (resolve, reject) => {
@@ -737,16 +741,16 @@ module.exports = {
                 let userWishlist = await db.get().collection('wishlist').findOne({ user: objectid(userId) })
                 console.log(userWishlist, 'wishlist');
                 if (userWishlist) {
-                    let productExist = await db.get().collection('wishlist').findOne({ user: objectid(userId), product: { item: objectid(productid) } })
-                    console.log(productExist), '=======================';
+                    let productExist = await db.get().collection('wishlist').findOne({ products: { item: objectid(productid) } })
+                    console.log(productExist,'oooooooooooooooooooooooo'), '=======================';
                     if (productExist) {
                         console.log("11111111111111111111");
-                        resolve()
+                        resolve(response.status=false)
                     } else {
                         console.log("22222222222222222222");
                         db.get().collection('wishlist').updateOne({ user: objectid(userId) },
                             { $push: { products: proObj } }).then((response) => {
-                                resolve()
+                                resolve(response.status=true)
                             }).catch((response) => {
                                 console.log(response);
                             })
@@ -757,7 +761,7 @@ module.exports = {
                         products: [proObj]
                     }
                     db.get().collection('wishlist').insertOne(wishObj).then((response) => {
-                        resolve()
+                        resolve(response.status=true)
                     })
                 }
 
@@ -775,6 +779,7 @@ module.exports = {
         console.log(typeof (id), "   wwwwwwww");
         return new Promise(async (resolve, reject) => {
             try {
+
                 let wishlist = await db.get().collection('wishlist').aggregate([{ $match: { user: objectid(id) } },
                 {
                     '$unwind': {
@@ -896,7 +901,7 @@ module.exports = {
         return new Promise((resolve, reject) => {
             try {
                 if (grandTotal || discountAmount) {
-                    db.get().collection('orders').insertOne({ userid, paymentDetails, deliveryAddress, multiproducts, status, date, grandTotal, discountAmount }).then(async (data) => {
+                    db.get().collection('orders').insertOne({ userid, paymentDetails, deliveryAddress, multiproducts, status, date, grandTotal, discountAmount, deliveryStatus:"pending" }).then(async (data) => {
 
                         if (data) {
                             let order = await db.get().collection('orders').findOne({ _id: data.insertedId })
@@ -911,7 +916,7 @@ module.exports = {
                 } else {
 
 
-                    db.get().collection('orders').insertOne({ userid, paymentDetails, deliveryAddress, multiproducts, status, date, totalPrice }).then(async (response) => {
+                    db.get().collection('orders').insertOne({ userid, paymentDetails, deliveryAddress, multiproducts, status, date, totalPrice,deliveryStatus:"pending" }).then(async (response) => {
 
                         console.log(response, "dataaaaaaaaaaaaaa");
                         if (response) {
@@ -949,43 +954,43 @@ module.exports = {
                         { $match: { userid: objectid(userId) } },
 
                         {
-                          '$project': {
-                            'userid': 1, 
-                            'paymentDetails': 1, 
-                            'deliveryAddress': 1, 
-                            'status': 1, 
-                            'data': 1, 
-                            'grandTotal': 1, 
-                            'discountAmount': 1, 
-                            'totalPrice': '$totalPrice', 
-                            'products': '$multiproducts.products.item', 
-                            'productQty': '$multiproducts.products.quantity', 
-                            'productsize': '$multiproducts.products.Size'
-                          }
+                            '$project': {
+                                'userid': 1,
+                                'paymentDetails': 1,
+                                'deliveryAddress': 1,
+                                'status': 1,
+                                'data': 1,
+                                'grandTotal': 1,
+                                'discountAmount': 1,
+                                'totalPrice': '$totalPrice',
+                                'products': '$multiproducts.products.item',
+                                'productQty': '$multiproducts.products.quantity',
+                                'productsize': '$multiproducts.products.Size'
+                            }
                         }, {
-                          '$lookup': {
-                            'from': 'products', 
-                            'localField': 'products', 
-                            'foreignField': '_id', 
-                            'as': 'productDetails'
-                          }
+                            '$lookup': {
+                                'from': 'products',
+                                'localField': 'products',
+                                'foreignField': '_id',
+                                'as': 'productDetails'
+                            }
                         }, {
-                          '$lookup': {
-                            'from': 'address', 
-                            'localField': 'deliveryAddress', 
-                            'foreignField': '_id', 
-                            'as': 'addressdetails'
-                          }
+                            '$lookup': {
+                                'from': 'address',
+                                'localField': 'deliveryAddress',
+                                'foreignField': '_id',
+                                'as': 'addressdetails'
+                            }
                         }, {
-                          '$unwind': {
-                            'path': '$productDetails'
-                          }
+                            '$unwind': {
+                                'path': '$productDetails'
+                            }
                         }, {
-                          '$unwind': {
-                            'path': '$addressdetails'
-                          }
+                            '$unwind': {
+                                'path': '$addressdetails'
+                            }
                         }
-                      ]
+                    ]
                 ).toArray()
                 console.log(orderDetails, "hhhhhhhhhhhhhhhhhhhhh");
                 resolve(orderDetails)
@@ -1145,17 +1150,20 @@ module.exports = {
         return new Promise((resolve, reject) => {
             try {
                 db.get().collection('address')
-                    .updateOne({ _id: objectid(addressId) }, {
+                    .updateOne({ _id: objectid(addressId)}, {
                         $set: {
+                            addressDetails: {
+                                address1: addressDetails.address1,
+                                address2: addressDetails.address2,
+                                city: addressDetails.city,
+                                state: addressDetails.state,
+                                pincode: addressDetails.pincode
+                            }
 
-                            address1: addressDetails.address1,
-                            address2: addressDetails.address2,
-                            city: addressDetails, city,
-                            state: addressDetails, state,
-                            pincode: addressDetails, pincode
+
                         }
                     }).then((response) => {
-                        resolve()
+                        resolve(response)
                     })
 
 
@@ -1167,50 +1175,227 @@ module.exports = {
         })
     },
 
-
-    getSingleOrder:(orderId)=>{
-        return new Promise(async(resolve,reject)=>{
+    updateprofile:(userId,user)=>{
+        console.log(userId,"userIdddddddddddddddd",user,"profileDetailssssssssssss");
+        return new Promise((resolve,reject)=>{
             try {
-               let singleOrder=await db.get().collection('orders').aggregate([
-
-
-                    { $match: { _id: objectid(orderId) } },
-                   
-                    {
-                        '$project': {
-                            'userid': 1,
-                            'paymentDetails': 1,
-                            'deliveryAddress': 1,
-                            'status': 1,
-                            'data': 1,
-                            'grandTotal': 1,
-                            'discountAmount': 1,
-                            'totalPrice': '$totalPrice',
-                            'products': '$multiproducts.products.item',
-                            'productQty': '$multiproducts.products.quantity',
-                            'productsize': '$multiproducts.products.Size'
-                        }
-                    }, {
-                        '$lookup': {
-                            'from': 'products',
-                            'localField': 'products',
-                            'foreignField': '_id',
-                            'as': 'productDetails'
-                        }
-                    }, {
-                        '$unwind': {
-                            'path': '$productDetails'
-                        },
-                        
-                    }
-
-                ]).toArray()
-                console.log(singleOrder,"singleOrder")
-                resolve(singleOrder)
+                db.get().collection('user').updateOne({_id:objectid(userId)},{
+                    $set:{      
+                            name:user.name,
+                            email:user.email,
+                            phonenumber:user.phonenumber
+                                       }
+                }).then((response)=>{
+                    resolve(response)
+                })
             } catch (error) {
                 reject(error)
             }
         })
+    },
+
+
+
+
+    getSingleOrder: (orderId) => {
+        return new Promise((async (resolve, reject) => {
+            try {
+                let singleOrder = await db.get().collection('orders').aggregate(
+                    [
+
+                        { $match: { _id: objectid(orderId) } },
+                        {
+                          '$project': {
+                            'userid': 1, 
+                            'paymentDetails': 1, 
+                            'deliveryAddress': 1, 
+                            'status': 1, 
+                            'data': 1, 
+                            'grandTotal': 1, 
+                            'discountAmount': 1, 
+                            'deliveryStatus': 1, 
+                            'totalPrice': '$totalPrice', 
+                            'products': '$multiproducts.products.item', 
+                            'productQty': '$multiproducts.products.quantity', 
+                            'productsize': '$multiproducts.products.Size'
+                          }
+                        }, {
+                          '$lookup': {
+                            'from': 'products', 
+                            'localField': 'products', 
+                            'foreignField': '_id', 
+                            'as': 'productDetails'
+                          }
+                        }, {
+                          '$unwind': {
+                            'path': '$productDetails'
+                          }
+                        }, {
+                          '$lookup': {
+                            'from': 'address', 
+                            'localField': 'deliveryAddress', 
+                            'foreignField': '_id', 
+                            'as': 'addressdetails'
+                          }
+                        }, {
+                          '$unwind': {
+                            'path': '$addressdetails'
+                          }
+                        }, {
+                          '$project': {
+                            'userid': 1, 
+                            'paymentDetails': 1, 
+                            'status': 1, 
+                            'deliveryStatus': 1, 
+                            'grandTotal': 1, 
+                            'discountAmount': 1, 
+                            'productQty': 1, 
+                            'addressId': '$addressdetails._id', 
+                            'address1': '$addressdetails.addressDetails.address1', 
+                            'address2': '$addressdetails.addressDetails.address2', 
+                            'city': '$addressdetails.addressDetails.city', 
+                            'state': '$addressdetails.addressDetails.state', 
+                            'pincode': '$addressdetails.addressDetails.state', 
+                            'productname': '$productDetails.name', 
+                            'productsize': '$productDetails.size', 
+                            'productprice': '$productDetails.price', 
+                            'discription': '$productDetails.description', 
+                            'image': '$productDetails.image', 
+                            'productcategory': '$productDetails.category'
+                          }
+                        }, {
+                          '$lookup': {
+                            'from': 'cat', 
+                            'localField': 'productcategory', 
+                            'foreignField': '_id', 
+                            'as': 'cat'
+                          }
+                        }, {
+                          '$project': {
+                            'userid': 1, 
+                            'paymentDetails': 1, 
+                            'status': 1, 
+                            'deliveryStatus': 1, 
+                            'addressId': 1, 
+                            'address1': 1, 
+                            'address2': 1, 
+                            'city': 1, 
+                            'state': 1, 
+                            'productQty': 1, 
+                            'pincode': 1, 
+                            'productname': 1, 
+                            'grandTotal': 1, 
+                            'discountAmount': 1, 
+                            'productsize': 1, 
+                            'productprice': 1, 
+                            'discription': 1, 
+                            'image': 1, 
+                            'productcategory': '$cat.category'
+                          }
+                        }
+                      ]
+                ).toArray()
+                console.log(singleOrder, "singleOrder")
+                resolve(singleOrder)
+            } catch (error) {
+                reject(error)
+            }
+        }))
+    },
+
+
+    //  getSingleOrder: (orderId) => {
+    //     return new Promise(async (resolve, reject) => {
+    //         try {
+    //             let singleOrder = await db.get().collection('orders').aggregate([
+
+
+    //                 { $match: { _id: objectid(orderId) } },
+
+    //                 {
+    //                         $project: {
+    //                         'userid': 1,
+    //                         'paymentDetails': 1,
+    //                         'deliveryAddress': 1,
+    //                         'status': 1,
+    //                         'data': 1,
+    //                         'grandTotal': 1,
+    //                         'discountAmount': 1,
+    //                         'totalPrice': '$totalPrice',
+    //                         'products': '$multiproducts.products.item',
+    //                         'productQty': '$multiproducts.products.quantity',
+    //                         'productsize': '$multiproducts.products.Size'
+    //                     }
+    //                 }, {
+    //                     $lookup: {
+    //                         'from': 'products',
+    //                         'localField': 'products',
+    //                         'foreignField': '_id',
+    //                         'as': 'productDetails'
+    //                     }
+    //                 }, {
+    //                     $unwind: {
+    //                         'path': '$productDetails'
+    //                     },
+
+    //                 },
+    //                 {
+    //                     $lookup: {
+    //                         from: 'address',
+    //                         localField: 'deliveryAddress',
+    //                         foreignField: '_id',
+    //                         as: 'addressDetails'
+    //                     }
+                          
+    //                 },
+                    
+    //                 {
+    //                     $project: {
+    //                         'addressDetails': 1,
+    //                         'userid': 1,
+    //                         'paymentDetails': 1,
+    //                         'deliveryAddress': 1,
+    //                         'status': 1,
+    //                         'data': 1,
+    //                         'grandTotal': 1,
+    //                         'discountAmount': 1,
+    //                         'totalPrice': '$totalPrice',
+    //                         'products': '$multiproducts.products.item',
+    //                         'productQty': '$multiproducts.products.quantity',
+    //                         'productsize': '$multiproducts.products.Size'
+    //                     }
+    //                 }
+
+
+    //             ]).toArray()
+    //             console.log(singleOrder, "singleOrder")
+    //             resolve(singleOrder)
+    //         } catch (error) {
+    //             reject(error)
+    //         }
+    //     })
+    // },
+
+
+    updateUserPassword: (userId, userPassword) => {
+        return new Promise(async (resolve, reject) => {
+        try {
+
+
+                userPassword.PasswordOne = await bcrypt.hash(userPassword.PasswordOne, 10);
+
+                db.get().collection('user').updateOne({ _id: objectid(userId) }, { $set: { Password: userPassword.PasswordOne } }).then((data) => {
+
+                    resolve(data)
+
+                })
+           
+
+        } catch (error) {
+            reject(error)
+        }
+
+    })
     },
 
 

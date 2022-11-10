@@ -12,8 +12,8 @@ module.exports = {
 
 
   insertProducts: (productDetails) => {
-    console.log(productDetails.category ,'productDetails' ,typeof(productDetails.category));
-    productDetails.category =objectId(productDetails.category)
+    console.log(productDetails.category, 'productDetails', typeof (productDetails.category));
+    productDetails.category = objectId(productDetails.category)
     productDetails.price = parseInt(productDetails.price)
     return new Promise((resolve, reject) => {
       try {
@@ -24,7 +24,7 @@ module.exports = {
       } catch (error) {
         reject(error)
       }
-     
+
     })
   },
 
@@ -68,7 +68,7 @@ module.exports = {
       } catch (error) {
         reject(error)
       }
-  
+
     })
   },
   editproduct: (prodId) => {
@@ -81,7 +81,7 @@ module.exports = {
       } catch (error) {
         reject(error)
       }
-  
+
     })
   },
 
@@ -175,7 +175,7 @@ module.exports = {
       } catch (error) {
         reject(error)
       }
-  
+
     })
   },
 
@@ -231,6 +231,192 @@ module.exports = {
     })
   },
 
+  shipProduct: (orderid) => {
+
+    const id = objectId(orderid)
+    console.log(orderid, 'idddddddddddddd');
+    console.log(typeof (id))
+    return new Promise(async (resolve, reject) => {
+      try {
+        await db.get().collection('orders').updateOne({ _id: objectId(id) },
+          {
+            $set: {
+
+              deliveryStatus: "Shipped"
+            }
+          }
+
+        ).then((response) => {
+          resolve(response)
+        })
+      } catch (error) {
+        reject(error)
+      }
+    })
+  },
+
+  deliverProduct: (orderid) => {
+
+    const id = objectId(orderid)
+    console.log(orderid, 'idddddddddddddd');
+    console.log(typeof (id))
+    return new Promise(async (resolve, reject) => {
+      try {
+        await db.get().collection('orders').updateOne({ _id: objectId(id) },
+
+          {
+            $set: {
+              deliveryStatus: 'Deliverd'
+            }
+          }
+        ).then((response) => {
+          resolve(response)
+        })
+      } catch (error) {
+        reject(error)
+      }
+    })
+  },
+
+  cancelOrder: (orderid) => {
+
+    const id = objectId(orderid)
+    console.log(orderid, 'idddddddddddddd');
+    console.log(typeof (id))
+    return new Promise(async (resolve, reject) => {
+      try {
+        await db.get().collection('orders').updateOne({ _id: objectId(id) },
+          {
+
+            $set: {
+              deliveryStatus: 'Cancelled'
+            }
+          }
+
+
+        ).then((response) => {
+          resolve(response)
+        })
+
+      } catch (error) {
+        reject(error)
+      }
+    })
+  },
+
+
+
+
+  getProductDetails:(productId)=>{
+    console.log(productId,'id');
+    console.log(typeof(productId))
+    const id=objectId(productId)
+    return new Promise((async(resolve,reject)=>{
+      try {
+        let singleproduct = await db.get().collection('orders').aggregate(
+
+          [
+
+            { $match: { _id: objectId(id) } },
+            {
+              '$project': {
+                'userid': 1, 
+                'paymentDetails': 1, 
+                'deliveryAddress': 1, 
+                'status': 1, 
+                'data': 1, 
+                'grandTotal': 1, 
+                'discountAmount': 1, 
+                'deliveryStatus': 1, 
+                'totalPrice': '$totalPrice', 
+                'products': '$multiproducts.products.item', 
+                'productQty': '$multiproducts.products.quantity', 
+                'productsize': '$multiproducts.products.Size'
+              }
+            }, {
+              '$lookup': {
+                'from': 'products', 
+                'localField': 'products', 
+                'foreignField': '_id', 
+                'as': 'productDetails'
+              }
+            }, {
+              '$unwind': {
+                'path': '$productDetails'
+              }
+            }, {
+              '$lookup': {
+                'from': 'address', 
+                'localField': 'deliveryAddress', 
+                'foreignField': '_id', 
+                'as': 'addressdetails'
+              }
+            }, {
+              '$unwind': {
+                'path': '$addressdetails'
+              }
+            }, {
+              '$project': {
+                'userid': 1, 
+                'paymentDetails': 1, 
+                'status': 1, 
+                'deliveryStatus': 1, 
+                'grandTotal': 1, 
+                'discountAmount': 1, 
+                'productQty': 1, 
+                'addressId': '$addressdetails._id', 
+                'address1': '$addressdetails.addressDetails.address1', 
+                'address2': '$addressdetails.addressDetails.address2', 
+                'city': '$addressdetails.addressDetails.city', 
+                'state': '$addressdetails.addressDetails.state', 
+                'pincode': '$addressdetails.addressDetails.state', 
+                'productname': '$productDetails.name', 
+                'productsize': '$productDetails.size', 
+                'productprice': '$productDetails.price', 
+                'discription': '$productDetails.description', 
+                'image': '$productDetails.image', 
+                'productcategory': '$productDetails.category'
+              }
+            }, {
+              '$lookup': {
+                'from': 'cat', 
+                'localField': 'productcategory', 
+                'foreignField': '_id', 
+                'as': 'cat'
+              }
+            }, {
+              '$project': {
+                'userid': 1, 
+                'paymentDetails': 1, 
+                'status': 1, 
+                'deliveryStatus': 1, 
+                'addressId': 1, 
+                'address1': 1, 
+                'address2': 1, 
+                'city': 1, 
+                'state': 1, 
+                'productQty': 1, 
+                'pincode': 1, 
+                'productname': 1, 
+                'grandTotal': 1, 
+                'discountAmount': 1, 
+                'productsize': 1, 
+                'productprice': 1, 
+                'discription': 1, 
+                'image': 1, 
+                'productcategory': '$cat.category'
+              }
+            }
+          ]
+        ).toArray()
+        console.log(singleproduct,"singleproduct");
+        resolve(singleproduct)
+      } catch (error) {
+        
+      }
+    }))
+
+  }
 
 
 

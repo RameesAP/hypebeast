@@ -85,7 +85,7 @@ router.get('/signin', (req, res, next) => {
   } catch (error) {
     next(error)
   }
- 
+
 });
 
 
@@ -118,7 +118,7 @@ router.get('/widget', (req, res, next) => {
   } catch (error) {
     next(error)
   }
- 
+
 });
 router.get('/form', (req, res, next) => {
   try {
@@ -126,7 +126,7 @@ router.get('/form', (req, res, next) => {
   } catch (error) {
     next(error)
   }
- 
+
 });
 
 
@@ -136,7 +136,7 @@ router.get('/dashboard', (req, res, next) => {
   } catch (error) {
     next(error)
   }
- 
+
 });
 
 
@@ -147,12 +147,12 @@ router.get('/product-mang', async (req, res, next) => {
   try {
     productDetails = await productHelpers.viewProducts()
     console.log(productDetails, 'product-mang');
-  
+
     res.render('admin/product-mang', { layout: 'adminLayout', admin: true, productDetails })
   } catch (error) {
     next(error)
   }
- 
+
 });
 
 router.get('/user-mang', async (req, res, next) => {
@@ -162,17 +162,17 @@ router.get('/user-mang', async (req, res, next) => {
   } catch (error) {
     next(error)
   }
- 
+
 });
 
 router.get('/add-product', async (req, res, next) => {
   try {
     let cat = await categoryHelpers.getCategory()
-  res.render('admin/add-product', { layout: 'adminLayout', admin: true, cat })
+    res.render('admin/add-product', { layout: 'adminLayout', admin: true, cat })
   } catch (error) {
     next(error)
   }
-  
+
 });
 
 
@@ -195,13 +195,13 @@ router.get('/user-block/:id', (req, res) => {
 router.get('/user-active/:id', (req, res, next) => {
   try {
     let userId = req.params.id;
-  adminHelpers.activeUser(userId).then((response) => {
-    res.redirect('/admin/user-mang')
-  })
+    adminHelpers.activeUser(userId).then((response) => {
+      res.redirect('/admin/user-mang')
+    })
   } catch (error) {
     next(error)
   }
-  
+
 })
 
 
@@ -210,10 +210,10 @@ router.get('/user-active/:id', (req, res, next) => {
 router.get('/category-mang', async (req, res) => {
   try {
     let category = await categoryHelpers.getAllCategory()
-    console.log(category,"sdfdfdsfdsf")
+    console.log(category, "sdfdfdsfdsf")
     res.render('admin/category-mang', { layout: 'adminLayout', admin: true, category })
   } catch (error) {
-   
+
   }
 
 
@@ -227,24 +227,24 @@ router.get('/add-category', (req, res) => {
     next(error)
   }
 
- 
+
 })
 
-router.post('/add-category',upload.array("catimages"), (req, res) => {
+router.post('/add-category', upload.array("catimages"), (req, res) => {
   try {
-    const images=req.files
-    let array=[]
-    array = images.map((value)=>value.filename)
+    const images = req.files
+    let array = []
+    array = images.map((value) => value.filename)
     req.body.catimages = array
-    console.log(req.body,"req,body");
-    categoryHelpers.addCategory(req.body).then((response)=>{
+    console.log(req.body, "req,body");
+    categoryHelpers.addCategory(req.body).then((response) => {
       res.redirect('/admin/category-mang')
     })
   } catch (error) {
     next(error)
   }
- 
- 
+
+
 })
 
 router.get('/category-delete/:id', (req, res) => {
@@ -272,7 +272,7 @@ router.get('/delete-product/:id', (req, res) => {
   } catch (error) {
     next(error)
   }
- 
+
 })
 
 //edit
@@ -280,15 +280,15 @@ router.get('/delete-product/:id', (req, res) => {
 router.get('/edit-product/:id', async (req, res) => {
   try {
     console.log('ho');
-  let proId = req.params.id
-  let category = await categoryHelpers.getAllCategory()
-  console.log(proId);
-  let product = await productHelpers.editproduct(proId)
-  res.render('admin/edit-product', { layout: 'adminLayout', admin: true, product, category })
+    let proId = req.params.id
+    let category = await categoryHelpers.getAllCategory()
+    console.log(proId);
+    let product = await productHelpers.editproduct(proId)
+    res.render('admin/edit-product', { layout: 'adminLayout', admin: true, product, category })
   } catch (error) {
     next(error)
   }
-  
+
 })
 
 
@@ -321,9 +321,9 @@ router.post('/edit-product/:id', upload.array("image", 3), (req, res) => {
       res.redirect('/admin/product-mang')
     })
   } catch (error) {
-   
+
   }
- 
+
 })
 
 
@@ -357,18 +357,18 @@ router.get('/add-banner', async (req, res, next) => {
 router.post('/add-banner', upload.array("images", 3), (req, res) => {
   try {
     console.log("banner immageeeeeeeeeeee");
-  const images = req.files
-  let array = []
-  array = images.map((value) => value.filename);
-  req.body.image = array;
-  console.log(req.body, 'req.body');
-  productHelpers.bannerAdd(req.body).then((response) => {
-    res.redirect('/admin/banner')
-  })
+    const images = req.files
+    let array = []
+    array = images.map((value) => value.filename);
+    req.body.image = array;
+    console.log(req.body, 'req.body');
+    productHelpers.bannerAdd(req.body).then((response) => {
+      res.redirect('/admin/banner')
+    })
   } catch (error) {
     next(error)
   }
-  
+
 });
 
 
@@ -436,8 +436,8 @@ router.get('/coupon-table', async (req, res) => {
 
 router.get('/add-coupon', (req, res) => {
   try {
-    
-  res.render('admin/add-coupon', { layout: 'adminLayout', admin: true })
+
+    res.render('admin/add-coupon', { layout: 'adminLayout', admin: true })
   } catch (error) {
     next(error)
   }
@@ -452,7 +452,7 @@ router.post('/add-coupon', (req, res) => {
     console.log(coupon);
     res.redirect('/admin/coupon-table')
   } catch (error) {
-    
+
   }
 
 })
@@ -469,23 +469,73 @@ router.get('/delete-coupon/:id', (req, res) => {
 
 })
 
-router.get('/order-mang',async(req,res)=>{
+router.get('/order-mang', async (req, res) => {
   try {
     let viewAllOrders = await adminHelpers.viewAllOrders()
-    console.log(viewAllOrders,"viewAllOrders");
-    res.render('admin/order-mang',{ layout: 'adminLayout', admin: true,viewAllOrders})
+    console.log(viewAllOrders, "viewAllOrders");
+    res.render('admin/order-mang', { layout: 'adminLayout', admin: true, viewAllOrders })
   } catch (error) {
     next(error)
   }
 
 })
 
-router.use(function(req, res, next) {
+router.get('/ordered-prod/:id',async(req,res,next)=>{
+  try {
+    productId=req.params.id
+    singleproduct= await productHelpers.getProductDetails(productId)
+    console.log(singleproduct,'single');
+
+    res.render('admin/ordered-prod', { layout: 'adminLayout', admin: true,singleproduct })
+  } catch (error) {
+    next(error)
+  }
+})
+
+
+
+router.post('/productShip', (req, res) => {
+  // let id = req.body.data
+  console.log(req.body,"idddddddddddddddddddddddddddddddd");
+  productHelpers.shipProduct(req.body.id).then((response) => {
+
+    res.json({ response })
+
+  })
+})
+
+router.post('/productDeliver', (req, res) => {
+  // let id = req.params.id
+  console.log(req.body,"iddddddddddddddddddddliver");
+  productHelpers.deliverProduct(req.body.id).then((response) => {
+
+    res.json({ response })
+  })
+})
+
+router.post('/cancelOrder', (req, res) => {
+  // let id = req.params.id
+  console.log(req.body,"iddddddddddddddddddddliver");
+  productHelpers.cancelOrder(req.body.id).then((response) => {
+    res.json({ response })
+  })
+})
+
+
+
+
+
+
+
+
+
+
+router.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-router.use(function(err, req, res, next) {
+router.use(function (err, req, res, next) {
   console.log(err);
   // set locals, only providing error in development
   res.locals.message = err.message;
@@ -493,8 +543,13 @@ router.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('admin/error',{ layout: 'adminLayout'});
+  res.render('admin/error', { layout: 'adminLayout' });
 });
+
+
+
+
+
 
 
 

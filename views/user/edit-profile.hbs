@@ -6,19 +6,19 @@
   <div class=" container row d-flex justify-content-center">
     <div class="ml-5 col-md-6">
       <h2 class="text-center mt-5">Edit Profile</h2>
-      
-        <form action="/user/edit-profile/{{UserEdit._id}}" method="post">
+      {{#with UserEdit}}
+        <form action="/edit-profile/{{this._id}}" method="post">
   <div class="form-group">
     <label for="inputAddress">Your Name</label>
-    <input type="text" name="name" class="form-control"  placeholder="Enter Name" value="{{UserEdit.name}}">
+    <input type="text" name="name" class="form-control"  placeholder="Enter Name" value="{{this.name}}" required>
   </div>
   <div class="form-group">
     <label for="inputAddress2">Your Email</label>
-    <input type="email" name="email" class="form-control"  placeholder="Enter Gmail" value="{{UserEdit.email}}">
+    <input type="email" name="email" class="form-control"  placeholder="Enter Gmail" value="{{this.email}}" required>
   </div>
   <div class="form-group">
     <label for="inputAddress2">Phone Number</label>
-    <input type="number" name="number"  class="form-control"  placeholder="Number" value="{{UserEdit.phonenumber}}">
+    <input type="number" name="number"  class="form-control"  placeholder="Number" value="{{this.phonenumber}}" required>
   </div>
   <div class="form-row">
     {{!-- <div class="form-group col-md-6">
@@ -48,6 +48,7 @@
   </div> --}}
   <button type="submit" class="btn btn-primary">Save</button>
 </form>
+{{/with}}
 
     </div>
   </div>

@@ -25,7 +25,7 @@
                                 <div class="mb-3">
                                     <label for="name" class="form-label">Name</label>
                                     <input type="text" name="name" class="form-control" id="name"
-                                        aria-describedby="emailHelp">
+                                        aria-describedby="emailHelp" required>
                                     {{!-- <div id="emailHelp" class="form-text">We'll never share your email with anyone
                                         else.
                                     </div> --}}
@@ -35,7 +35,7 @@
                                     <input type="text" name="category" class="form-control" id="category">
                                 </div> --}}
                                 
-                                <select class="form-select" name="category" aria-label="Default select example">
+                                <select class="form-select" name="category" aria-label="Default select example" required>
                                     <option selected>Category</option>
 
                                     {{#each cat}}
@@ -53,11 +53,11 @@
                                 
                                 <div class="mb-3">
                                     <label for="price" class="form-label">Price</label>
-                                    <input type="text" name="price" class="form-control" id="price">
+                                    <input type="text" name="price" class="form-control" id="price" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="description" class="form-label">Description</label>
-                                    <input type="text" name="description" class="form-control" id="description">
+                                    <input type="text" name="description" class="form-control" id="description" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="formFileMultiple" class="form-label">Multiple files input

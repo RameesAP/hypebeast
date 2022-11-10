@@ -18,44 +18,46 @@
                 <div class="col-lg-10 col-xl-8 mt-5">
                     <div class="card" style="border-radius: 10px;">
                         <div class="card-header px-4 py-5">
-                            <h5 class="text-muted mb-0">Thanks for your Order, <span
-                                    style="color: #a8729a;">Anna</span>!</h5>
+                            <h5 class="text-muted mb-0">Order Deatils<span style="color: #a8729a;"></span></h5>
                         </div>
                         <div class="card-body p-4">
                             <div class="d-flex justify-content-between align-items-center mb-4">
                                 <p class="lead fw-normal mb-0" style="color: #a8729a;">Receipt</p>
-                                <p class="small text-muted mb-0">Receipt Voucher : 1KAU9-84UIL</p>
+                                {{#each singleOrder}}
+                                <p class="small text-muted mb-0">UserID : {{this.userid}}</p>
+                                {{/each}}
                             </div>
+                            {{#each singleOrder}}
                             <div class="card shadow-0 border mb-4">
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-md-2">
-                                            <img src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/E-commerce/Products/13.webp"
+                                            <img src="/product-image/{{this.image.[0]}}"
                                                 class="img-fluid" alt="Phone">
                                         </div>
                                         <div
                                             class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                                            <p class="text-muted mb-0">Samsung Galaxy</p>
+                                            <p class="text-muted mb-0">{{this.productname}}</p>
                                         </div>
                                         <div
                                             class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                                            <p class="text-muted mb-0 small">White</p>
+                                            <p class="text-muted mb-0 small">Payment Status: {{this.status}}</p>
                                         </div>
                                         <div
                                             class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                                            <p class="text-muted mb-0 small">Capacity: 64GB</p>
+                                            <p class="text-muted mb-0 small">PaymentMethod: {{this.paymentDetails}}</p>
                                         </div>
                                         <div
                                             class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                                            <p class="text-muted mb-0 small">Qty: 1</p>
+                                            <p class="text-muted mb-0 small">OrderStatus: {{this.deliveryStatus}}</p>
                                         </div>
                                         <div
                                             class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                                            <p class="text-muted mb-0 small">$499</p>
+                                            <p class="text-muted mb-0 small">Price :{{this.grandTotal}}</p>
                                         </div>
                                     </div>
-                                    <hr class="mb-4" style="background-color: #e0e0e0; opacity: 1;">
-                                    <div class="row d-flex align-items-center">
+                                    {{!-- <hr class="mb-4" style="background-color: #e0e0e0; opacity: 1;"> --}}
+                                    {{!-- <div class="row d-flex align-items-center">
                                         <div class="col-md-2">
                                             <p class="text-muted mb-0 small">Track Order</p>
                                         </div>
@@ -71,9 +73,10 @@
                                                 <p class="text-muted mt-1 mb-0 small ms-xl-5">Delivered</p>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> --}}
                                 </div>
                             </div>
+                            {{/each}}
                             {{!-- <div class="card shadow-0 border mb-4">
                                 <div class="card-body">
                                     <div class="row">
@@ -122,24 +125,35 @@
                                 </div>
                             </div> --}}
                             <hr class="mb-4" style="background-color: #e0e0e0; opacity: 1;">
-                            <div>
-                            <div class="d-inline-flex p-2"> <p class="fw-bold mb-0">Order Details</p> </div>
-                                <div class="align-self-start text-muted p-2">Subtotal :</div>
-                                <div class="align-self-start text-muted p-2">Discount :</div>
-                                <div class="align-self-start text-muted p-2">Total :</div>
-                            </div>
-                            <hr class="mb-4" style="background-color: #e0e0e0; opacity: 1;">
-                            <div>
-                            <div class="d-inline-flex p-2"> <p class="fw-bold mb-0">Address Details</p> </div>
-                                <div class="align-self-start text-muted p-2">Address 1 :</div>
-                                <div class="align-self-start text-muted p-2">Address 2 :</div>
-                                <div class="align-self-start text-muted p-2">City :</div>
-                                 <div class="align-self-start text-muted p-2">State :</div>
-                                  <div class="align-self-start text-muted p-2">Pincode :</div>
-                            </div>
-                           
 
-                           
+                            <div>
+                                <div class="d-inline-flex p-2">
+                                    <p class="fw-bold mb-0">Order Details</p>
+                                </div>
+                                <div>
+                                {{#each singleOrder}}
+                                <div class="align-self-start text-muted p-2">Subtotal :{{this.productprice}}</div>
+                                <div class="align-self-start text-muted p-2">Discount :{{this.discountAmount}}</div>
+                                <div class="align-self-start text-muted p-2">Total :{{this.grandTotal}}</div>
+                                {{/each}}
+                            </div>
+
+                            <hr class="mb-4" style="background-color: #e0e0e0; opacity: 1;">
+                            {{#each singleOrder}}
+                            <div>
+                                <div class="d-inline-flex p-2">
+                                    <p class="fw-bold mb-0">Address Details</p>
+                                </div>
+                                <div class="align-self-start text-muted p-2">Address 1 :{{this.address1}}</div>
+                                <div class="align-self-start text-muted p-2">Address 2 :{{this.address2}}</div>
+                                <div class="align-self-start text-muted p-2">City :{{this.city}}</div>
+                                <div class="align-self-start text-muted p-2">State :{{this.state}}</div>
+                                <div class="align-self-start text-muted p-2">Pincode :{{this.pincode}}</div>
+                            </div>
+                            {{/each}}
+
+
+
                             {{!-- <div class="d-flex justify-content-between pt-2">
                                 <p class="text-muted mb-0">Invoice Number : 788152</p>
                                 <p class="text-muted mb-0"><span class="fw-bold me-4">Discount</span> $19.00</p>
