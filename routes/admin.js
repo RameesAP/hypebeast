@@ -31,10 +31,17 @@ const upload = multer({ storage: storage })
 
 
 /* GET users listing. */
-router.get('/', function (req, res, next) {
+router.get('/', async function (req, res, next) {
   try {
     if (req.session.admin) {
-      res.render('admin/index', { layout: 'adminLayout', admin: true })
+      let user = await userHelpers.getUserCount()
+      console.log(typeof (user));
+      let orderCount = await userHelpers.getOrderCount()
+      let productCount = await userHelpers.getproductCount()
+      let totalRevenue = await userHelpers.getRevenue()
+      console.log(totalRevenue,"totalRevenue");
+
+      res.render('admin/index', { layout: 'adminLayout', admin: true, user, orderCount, productCount,totalRevenue})
     } else {
       res.redirect('/admin/signin')
     }
@@ -44,6 +51,15 @@ router.get('/', function (req, res, next) {
 
 
 });
+
+router.get('/logout',(req,res)=>{
+  try {
+    req.session.destroy()
+    res.redirect('/admin/signin')
+  } catch (error) {
+    console.log(error);
+  }
+})
 
 //add product
 // router.post('/add-product',upload.array('images',3),(req,res)=>{
@@ -75,6 +91,20 @@ router.post('/add-products', upload.array("images", 3), (req, res) => {
     next(error)
   }
 
+})
+
+router.get('/chart',async(req,res)=>{
+  try {
+    // let totalRevenue = await userHelpers.getRevenue()
+    let CategoryBase = await userHelpers.CategoryBaseSale()
+    let DayBase = await userHelpers.DayBaseSale()
+    console.log(DayBase,'catsale');
+    // console.log(totalRevenue,"totalRevenue11111111111111111");
+    res.json({CategoryBase,DayBase})
+  } catch (error) {
+    console.log(error,'error vann');
+    
+  }
 })
 
 //admin login
@@ -480,13 +510,13 @@ router.get('/order-mang', async (req, res) => {
 
 })
 
-router.get('/ordered-prod/:id',async(req,res,next)=>{
+router.get('/ordered-prod/:id', async (req, res, next) => {
   try {
-    productId=req.params.id
-    singleproduct= await productHelpers.getProductDetails(productId)
-    console.log(singleproduct,'single');
+    productId = req.params.id
+    singleproduct = await productHelpers.getProductDetails(productId)
+    console.log(singleproduct, 'single');
 
-    res.render('admin/ordered-prod', { layout: 'adminLayout', admin: true,singleproduct })
+    res.render('admin/ordered-prod', { layout: 'adminLayout', admin: true, singleproduct })
   } catch (error) {
     next(error)
   }
@@ -496,7 +526,7 @@ router.get('/ordered-prod/:id',async(req,res,next)=>{
 
 router.post('/productShip', (req, res) => {
   // let id = req.body.data
-  console.log(req.body,"idddddddddddddddddddddddddddddddd");
+  console.log(req.body, "idddddddddddddddddddddddddddddddd");
   productHelpers.shipProduct(req.body.id).then((response) => {
 
     res.json({ response })
@@ -506,7 +536,7 @@ router.post('/productShip', (req, res) => {
 
 router.post('/productDeliver', (req, res) => {
   // let id = req.params.id
-  console.log(req.body,"iddddddddddddddddddddliver");
+  console.log(req.body, "iddddddddddddddddddddliver");
   productHelpers.deliverProduct(req.body.id).then((response) => {
 
     res.json({ response })
@@ -515,7 +545,7 @@ router.post('/productDeliver', (req, res) => {
 
 router.post('/cancelOrder', (req, res) => {
   // let id = req.params.id
-  console.log(req.body,"iddddddddddddddddddddliver");
+  console.log(req.body, "iddddddddddddddddddddliver");
   productHelpers.cancelOrder(req.body.id).then((response) => {
     res.json({ response })
   })
